@@ -4,6 +4,7 @@ module.exports = (bot, supabase) => {
     const messageId = callbackQuery.message.message_id;
     const data = callbackQuery.data;
 
+    // Menangani tombol "kategori"
     if (data === "kategori") {
       try {
         // Mengambil daftar kategori unik dari Supabase
@@ -240,7 +241,7 @@ module.exports = (bot, supabase) => {
                 [
                   {
                     text: "📋 Copy Link",
-                    callback_data: `copylink_${product.id}`, // Menambahkan product.id
+                    callback_data: `copylink_${product.id}`,
                   },
                 ],
               ],
@@ -269,29 +270,22 @@ module.exports = (bot, supabase) => {
     if (data.startsWith("copylink_")) {
       const productId = data.split("_")[1];
       try {
-        const { data: product, error } = await supabase
-          .from("products")
-          .select("*")
-          .eq("id", productId)
-          .single();
-
-        if (error) {
-          throw error;
-        }
-
         // Membuat URL yang akan disalin
-        const productLink = `https://t.me/xcreatestore_bot?start=produkid_${product.id}`;
+        const productLink = `https://t.me/xcreatestore_bot?start=produkid_${productId}`;
+
+        // Pesan yang menginformasikan bahwa link telah disalin
+        const productCopyMessage = `📋 Link produk telah disalin! Berikut link-nya: ${productLink}`;
 
         // Mengirimkan pesan dengan link yang bisa disalin
-        bot.sendMessage(chatId, `📋 Link produk telah disalin! Berikut link-nya: ${productLink}`);
+        bot.sendMessage(chatId, productCopyMessage);
 
         // Hapus status callback agar tidak terlihat lagi
         bot.answerCallbackQuery(callbackQuery.id);
       } catch (error) {
-        console.error("Error fetching product for copy link:", error);
+        console.error("Error copying link:", error);
         bot.sendMessage(
           chatId,
-          "❗ Terjadi kesalahan saat mengambil link produk."
+          "❗ Terjadi kesalahan saat menyalin link produk."
         );
       }
     }
