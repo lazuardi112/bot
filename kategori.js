@@ -213,12 +213,12 @@ module.exports = (bot, supabase) => {
         // Kirim gambar terlebih dahulu
         bot.sendPhoto(chatId, imageUrl, { caption: product.name }).then(() => {
           // Setelah gambar dikirim, kirim pesan detail produk
-          const message = `✨ *Detail Produk* ✨\n\n**Nama Produk:** ${
+          const message = `✨ *Detail HTML* ✨\n\n**Nama Produk:** ${
             product.name
           }\n**Harga:** ${new Intl.NumberFormat("id-ID", {
             style: "currency",
             currency: "IDR",
-          }).format(product.price)}\n\n*Deskripsi:* \n${product.description}\n\nlink https://t.me/xcreatestore_bot=start?produkid_${product.id}`;
+          }).format(product.price)}\n\n*Deskripsi:* \n${product.description}\n`;
 
           // Kirim pesan detail produk setelah gambar dikirim
           bot.sendMessage(chatId, message, {
@@ -235,6 +235,12 @@ module.exports = (bot, supabase) => {
                   {
                     text: "🎮 Demo Tampilan",
                     url: `https://xcreate-store.web.app?produkid=${product.id}`,
+                  },
+                ],
+                [
+                  {
+                    text: "📋 Copy Link",
+                    callback_data: `copylink`,
                   },
                 ],
               ],
@@ -258,5 +264,18 @@ module.exports = (bot, supabase) => {
         `💬 Untuk membeli produk ini, silakan hubungi @xcodedesain.`
       );
     }
+
+    if (data.startsWith("copylink")) {
+    const productId = data.split("_")[2];
+
+    // Menyalin teks dan mengirim pesan
+    const productCopyMessage = `https://t.me/xcreatestore_bot=start?produkid_${product.id}`;
+
+    // Kirim pesan dengan teks yang telah disalin
+    bot.sendMessage(chatId, productCopyMessage);
+
+    // Hapus status callback agar tidak terlihat lagi
+    bot.answerCallbackQuery(callbackQuery.id);
+  }
   });
 };
