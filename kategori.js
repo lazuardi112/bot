@@ -240,7 +240,7 @@ module.exports = (bot, supabase) => {
                 [
                   {
                     text: "📋 Copy Link",
-                    callback_data: `copylink`,
+                    callback_data: `copylink_${product.id}`, // Menambahkan product.id
                   },
                 ],
               ],
@@ -265,15 +265,35 @@ module.exports = (bot, supabase) => {
       );
     }
 
-    if (data === "copylink") {
-    // Membuat URL yang akan disalin
-    const productLink = `https://t.me/xcreatestore_bot?start=produkid_${product.id}`;
+    // Menangani tombol "Copy Link"
+    if (data.startsWith("copylink_")) {
+      const productId = data.split("_")[1];
+      try {
+        const { data: product, error } = await supabase
+          .from("products")
+          .select("*")
+          .eq("id", productId)
+          .single();
 
-    // Mengirimkan pesan dengan link yang bisa disalin
-    bot.sendMessage(chatId, `📋 Link produk telah disalin! Berikut link-nya: ${productLink}`);
+        if (error) {
+          throw error;
+        }
 
-    // Hapus status callback agar tidak terlihat lagi
-    bot.answerCallbackQuery(callbackQuery.id);
-  }
+        // Membuat URL yang akan disalin
+        const productLink = `https://t.me/xcreatestore_bot?start=produkid_${product.id}`;
+
+        // Mengirimkan pesan dengan link yang bisa disalin
+        bot.sendMessage(chatId, `📋 Link produk telah disalin! Berikut link-nya: ${productLink}`);
+
+        // Hapus status callback agar tidak terlihat lagi
+        bot.answerCallbackQuery(callbackQuery.id);
+      } catch (error) {
+        console.error("Error fetching product for copy link:", error);
+        bot.sendMessage(
+          chatId,
+          "❗ Terjadi kesalahan saat mengambil link produk."
+        );
+      }
+    }
   });
 };
