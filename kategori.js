@@ -265,14 +265,12 @@ module.exports = (bot, supabase) => {
       );
     }
 
-    if (data.startsWith("copylink")) {
-    const productId = data.split("_")[2];
+    if (data === "copylink") {
+    // Membuat URL yang akan disalin
+    const productLink = `https://t.me/xcreatestore_bot?start=produkid_${product.id}`;
 
-    // Menyalin teks dan mengirim pesan
-    const productCopyMessage = `https://t.me/xcreatestore_bot=start?produkid_${product.id}`;
-
-    // Kirim pesan dengan teks yang telah disalin
-    bot.sendMessage(chatId, productCopyMessage);
+    // Mengirimkan pesan dengan link yang bisa disalin
+    bot.sendMessage(chatId, `📋 Link produk telah disalin! Berikut link-nya: ${productLink}`);
 
     // Hapus status callback agar tidak terlihat lagi
     bot.answerCallbackQuery(callbackQuery.id);
