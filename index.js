@@ -5,7 +5,7 @@ const uploadImg = require("./uploadimg"); // Memanggil file uploadimg.js
 const kategori = require("./kategori"); // Memanggil file kategori.js
 
 // Ganti dengan token yang kamu dapatkan dari BotFather
-const token = "6479315189:AAHElOigPePPwHkhZXFaKjIqr2qRVoDh35U";
+const token = "7890775366:AAEfwfGl05jBcYkBY9hnKXPuz0wXwU47OVA";
 
 // Membuat bot dengan polling
 const bot = new TelegramBot(token, { polling: true });
