@@ -1,73 +1,145 @@
-const symbols = [
-    'assets/slots-7.png',
-    'assets/slots-bar.png',
-    'assets/slots-crown.png',
-    'assets/slots-diamond.png',
-    'assets/slots-lemon.png',
-    'assets/slots-melon.png',
-    'assets/slots-10.png'
-];
+document.addEventListener('DOMContentLoaded', () => {
+    // Pengambilan Elemen DOM
+    const slotMachine = document.getElementById('slot-machine');
+    const spinBtn = document.getElementById('spin-btn');
+    const betUpBtn = document.getElementById('bet-up-btn');
+    const betDownBtn = document.getElementById('bet-down-btn');
+    const balanceDisplay = document.getElementById('balance-display');
+    const betDisplay = document.getElementById('bet-display');
+    const winDisplay = document.getElementById('win-display');
+    const spinSound = document.getElementById('spin-sound');
+    const winSound = document.getElementById('win-sound');
 
-let credits = 100;
-let betAmount = 10;
+    // Status Game
+    let balance = 1000;
+    let currentBet = 10;
+    const betStep = 10;
+    const numRows = 4;
+    const numCols = 5;
+    let isSpinning = false;
 
-const creditsDisplay = document.getElementById('credits');
-const betAmountDisplay = document.getElementById('bet-amount');
-const spinButton = document.getElementById('spin-button');
-const reels = document.querySelectorAll('.reel');
-const winImage = document.getElementById('win-image');
-const messageContainer = document.getElementById('message-container');
+    // Aset Simbol
+    const symbols = {
+        'zeus': 'zeusbrabo.jpeg',
+        'apollo': 'apolo.jpg',
+        'hermes': 'hermes.jpg',
+        'pegasus': 'str.jpeg', // Menggunakan gambar yang ada sebagai placeholder
+        'temple': 'zeusl.jpeg', // Placeholder
+        'wild': 'logopr.jpeg', // Placeholder
+        'scatter': 'cont.jpeg' // Placeholder
+    };
+    const symbolKeys = Object.keys(symbols);
 
-spinButton.addEventListener('click', () => {
-    if (credits >= betAmount) {
-        credits -= betAmount;
-        creditsDisplay.textContent = credits;
-        winImage.style.display = 'none';
-        messageContainer.textContent = '';
-        document.getElementById('spin-sound').play();
-        spin();
+    // --- Inisialisasi ---
+    function init() {
+        createGrid();
+        updateDisplays();
     }
-});
 
-function spin() {
-    let finalSymbols = [];
+    function createGrid() {
+        slotMachine.innerHTML = '';
+        for (let i = 0; i < numRows * numCols; i++) {
+            const reel = document.createElement('div');
+            reel.classList.add('reel');
+            const img = document.createElement('img');
+            // Mulai dengan simbol acak
+            const randomSymbol = symbolKeys[Math.floor(Math.random() * symbolKeys.length)];
+            img.src = `assets/${symbols[randomSymbol]}`;
+            img.alt = randomSymbol;
+            reel.appendChild(img);
+            slotMachine.appendChild(reel);
+        }
+    }
 
-    reels.forEach((reel, index) => {
-        const animation = reel.animate([
-            { transform: 'translateY(-300%)' },
-            { transform: 'translateY(0)' }
-        ], {
-            duration: 3000 + index * 700,
-            easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
-        });
+    // --- Logika Game ---
+    function spin() {
+        if (isSpinning) return;
+        if (balance < currentBet) {
+            alert("Kredit tidak cukup!");
+            return;
+        }
 
-        animation.onfinish = () => {
-            const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-            reel.innerHTML = `<img src="${randomSymbol}">`;
-            finalSymbols[index] = randomSymbol;
+        isSpinning = true;
+        balance -= currentBet;
+        winDisplay.textContent = '0';
+        updateDisplays();
+        spinSound.play();
 
-            if (index === reels.length - 1) {
-                checkWin(finalSymbols);
+        const reels = slotMachine.children;
+        let completedReels = 0;
+
+        for (let i = 0; i < reels.length; i++) {
+            const reel = reels[i];
+            const img = reel.querySelector('img');
+
+            // Animasi putaran sederhana
+            const spinInterval = setInterval(() => {
+                const randomSymbol = symbolKeys[Math.floor(Math.random() * symbolKeys.length)];
+                img.src = `assets/${symbols[randomSymbol]}`;
+            }, 100);
+
+            // Hentikan putaran setelah beberapa saat
+            setTimeout(() => {
+                clearInterval(spinInterval);
+                // Tetapkan simbol akhir (ini akan menjadi hasil sebenarnya)
+                const finalSymbol = symbolKeys[Math.floor(Math.random() * symbolKeys.length)];
+                img.src = `assets/${symbols[finalSymbol]}`;
+                img.alt = finalSymbol;
+
+                completedReels++;
+                if (completedReels === reels.length) {
+                    endSpin();
+                }
+            }, 1000 + i * 100); // Penundaan berjenjang untuk efek yang bagus
+        }
+    }
+
+    function endSpin() {
+        isSpinning = false;
+        checkForWins();
+    }
+
+    function checkForWins() {
+        // Placeholder untuk logika kemenangan
+        // TODO: Implementasikan 50 garis pembayaran dan deteksi kemenangan nyata
+
+        // Contoh logika kemenangan sederhana: jika ada 3 'zeus' di baris pertama
+        const reels = slotMachine.children;
+        let zeusCount = 0;
+        for(let i = 0; i < 5; i++) {
+            if (reels[i].querySelector('img').alt === 'zeus') {
+                zeusCount++;
             }
-        };
-    });
-}
+        }
 
-function checkWin(symbols) {
-    const counts = {};
-    symbols.forEach(symbol => counts[symbol] = (counts[symbol] || 0) + 1);
-
-    const maxCount = Math.max(...Object.values(counts));
-
-    if (maxCount >= 4) { // Win condition: 4 or more of the same symbol
-        const winAmount = betAmount * (maxCount * 2);
-        credits += winAmount;
-        creditsDisplay.textContent = credits;
-        messageContainer.textContent = `You won ${winAmount}!`;
-        winImage.src = 'assets/big-win.png';
-        winImage.style.display = 'block';
-        document.getElementById('win-sound').play();
-    } else {
-        messageContainer.textContent = 'No win this time.';
+        if (zeusCount >= 3) {
+            const winAmount = currentBet * 10; // Kemenangan 10x
+            balance += winAmount;
+            winDisplay.textContent = winAmount;
+            winSound.play();
+            updateDisplays();
+        }
     }
-}
+
+    // --- Kontrol UI ---
+    function updateDisplays() {
+        balanceDisplay.textContent = balance;
+        betDisplay.textContent = currentBet;
+    }
+
+    function adjustBet(amount) {
+        let newBet = currentBet + amount;
+        if (newBet > 0 && newBet <= balance) {
+            currentBet = newBet;
+            updateDisplays();
+        }
+    }
+
+    // --- Event Listeners ---
+    spinBtn.addEventListener('click', spin);
+    betUpBtn.addEventListener('click', () => adjustBet(betStep));
+    betDownBtn.addEventListener('click', () => adjustBet(-betStep));
+
+    // Mulai game
+    init();
+});

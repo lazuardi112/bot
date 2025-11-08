@@ -1,44 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zeus Slot Game</title>
+    <title>Slot Zeus - Seluler</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="game-container">
-        <div class="slot-machine">
-            <div class="reels">
-                <div class="reel"><img src="assets/slots-7.png"></div>
-                <div class="reel"><img src="assets/slots-bar.png"></div>
-                <div class="reel"><img src="assets/slots-crown.png"></div>
-                <div class="reel"><img src="assets/slots-diamond.png"></div>
-                <div class="reel"><img src="assets/slots-lemon.png"></div>
-                <div class="reel"><img src="assets/slots-melon.png"></div>
-                <div class="reel"><img src="assets/slots-10.png"></div>
+        <header class="game-header">
+            <h1>ZEUS</h1>
+        </header>
+
+        <main id="slot-machine">
+            <!-- Grid 5x4 akan dibuat oleh JavaScript -->
+        </main>
+
+        <div id="win-animation-container"></div>
+
+        <footer class="game-controls">
+            <div class="info-box">
+                <span class="label">Kredit</span>
+                <span id="balance-display">1000</span>
             </div>
-        </div>
-        <div id="ui-container">
-            <div id="status-bar">
-                <div class="ui-element">
-                    <span>Credits:</span>
-                    <span id="credits">100</span>
-                </div>
-                <div class="ui-element">
-                    <span>Bet:</span>
-                    <span id="bet-amount">10</span>
+            <div class="info-box">
+                <span class="label">Menang</span>
+                <span id="win-display">0</span>
+            </div>
+            <div class="info-box bet-controls">
+                 <span class="label">Taruhan</span>
+                <div class="bet-adjust">
+                    <button id="bet-down-btn">-</button>
+                    <span id="bet-display">10</span>
+                    <button id="bet-up-btn">+</button>
                 </div>
             </div>
-            <button id="spin-button">SPIN</button>
-            <div id="message-container"></div>
-        </div>
-        <div id="win-animation-container">
-            <img id="win-image" src="assets/big-win.png" style="display: none;">
-        </div>
-        <audio id="spin-sound" src="assets/spin.mp3"></audio>
-        <audio id="win-sound" src="assets/win.mp3"></audio>
+            <div class="spin-container">
+                <button id="spin-btn">SPIN</button>
+            </div>
+        </footer>
     </div>
-    <script src="script.js"></script>
-</body>
+
+    <!-- Elemen Audio untuk Efek Suara -->
+    <audio id="spin-sound" src="assets/sloth-inspired-hi-sound-no9-124910.mp3" preload="auto"></audio>
+    <audio id="win-sound" src="assets/Its-gonna-be-alrigh.mp3" preload="auto"></audio>
+
+    <script src="script.js"></script></body>
 </html>
