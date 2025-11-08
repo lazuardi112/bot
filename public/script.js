@@ -4,7 +4,8 @@ const symbols = [
     'assets/slots-crown.png',
     'assets/slots-diamond.png',
     'assets/slots-lemon.png',
-    'assets/slots-melon.png'
+    'assets/slots-melon.png',
+    'assets/slots-10.png'
 ];
 
 let credits = 100;
@@ -14,11 +15,16 @@ const creditsDisplay = document.getElementById('credits');
 const betAmountDisplay = document.getElementById('bet-amount');
 const spinButton = document.getElementById('spin-button');
 const reels = document.querySelectorAll('.reel');
+const winImage = document.getElementById('win-image');
+const messageContainer = document.getElementById('message-container');
 
 spinButton.addEventListener('click', () => {
     if (credits >= betAmount) {
         credits -= betAmount;
         creditsDisplay.textContent = credits;
+        winImage.style.display = 'none';
+        messageContainer.textContent = '';
+        document.getElementById('spin-sound').play();
         spin();
     }
 });
@@ -28,10 +34,10 @@ function spin() {
 
     reels.forEach((reel, index) => {
         const animation = reel.animate([
-            { transform: 'translateY(-200%)' },
+            { transform: 'translateY(-300%)' },
             { transform: 'translateY(0)' }
         ], {
-            duration: 2000 + index * 500,
+            duration: 3000 + index * 700,
             easing: 'cubic-bezier(0.25, 0.1, 0.25, 1)'
         });
 
@@ -48,18 +54,20 @@ function spin() {
 }
 
 function checkWin(symbols) {
-    const allSame = symbols.every(symbol => symbol === symbols[0]);
-    const threeOfAKind = symbols.filter((item, index) => symbols.indexOf(item) !== index).length > 0;
+    const counts = {};
+    symbols.forEach(symbol => counts[symbol] = (counts[symbol] || 0) + 1);
 
-    if (allSame) {
-        const winAmount = betAmount * 10;
+    const maxCount = Math.max(...Object.values(counts));
+
+    if (maxCount >= 4) { // Win condition: 4 or more of the same symbol
+        const winAmount = betAmount * (maxCount * 2);
         credits += winAmount;
         creditsDisplay.textContent = credits;
-        // Add win message/animation
-    } else if (threeOfAKind) {
-        const winAmount = betAmount * 2;
-        credits += winAmount;
-        creditsDisplay.textContent = credits;
-        // Add win message/animation
+        messageContainer.textContent = `You won ${winAmount}!`;
+        winImage.src = 'assets/big-win.png';
+        winImage.style.display = 'block';
+        document.getElementById('win-sound').play();
+    } else {
+        messageContainer.textContent = 'No win this time.';
     }
 }
