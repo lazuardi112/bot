@@ -3,47 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slot Zeus - Seluler</title>
+    <title>Game Slot Zeus</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="game-container">
-        <header class="game-header">
-            <h1>ZEUS</h1>
-        </header>
-
-        <main id="slot-machine">
-            <!-- Grid 5x4 akan dibuat oleh JavaScript -->
-        </main>
-
-        <div id="win-animation-container"></div>
-
-        <footer class="game-controls">
-            <div class="info-box">
-                <span class="label">Kredit</span>
-                <span id="balance-display">1000</span>
-            </div>
-            <div class="info-box">
-                <span class="label">Menang</span>
-                <span id="win-display">0</span>
-            </div>
-            <div class="info-box bet-controls">
-                 <span class="label">Taruhan</span>
-                <div class="bet-adjust">
-                    <button id="bet-down-btn">-</button>
-                    <span id="bet-display">10</span>
-                    <button id="bet-up-btn">+</button>
-                </div>
-            </div>
-            <div class="spin-container">
-                <button id="spin-btn">SPIN</button>
-            </div>
-        </footer>
+        <div id="reels-container"></div>
+        <button id="spin-button">Putar</button>
+        <div id="balance-container">
+            Saldo: <span id="balance">1000</span>
+        </div>
     </div>
-
-    <!-- Elemen Audio untuk Efek Suara -->
-    <audio id="spin-sound" src="assets/sloth-inspired-hi-sound-no9-124910.mp3" preload="auto"></audio>
-    <audio id="win-sound" src="assets/Its-gonna-be-alrigh.mp3" preload="auto"></audio>
-
-    <script src="script.js"></script></body>
+    <script src="script.js"></script>
+</body>
 </html>

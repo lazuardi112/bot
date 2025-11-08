@@ -1,145 +1,107 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Pengambilan Elemen DOM
-    const slotMachine = document.getElementById('slot-machine');
-    const spinBtn = document.getElementById('spin-btn');
-    const betUpBtn = document.getElementById('bet-up-btn');
-    const betDownBtn = document.getElementById('bet-down-btn');
-    const balanceDisplay = document.getElementById('balance-display');
-    const betDisplay = document.getElementById('bet-display');
-    const winDisplay = document.getElementById('win-display');
-    const spinSound = document.getElementById('spin-sound');
-    const winSound = document.getElementById('win-sound');
+    const reelsContainer = document.getElementById('reels-container');
+    const spinButton = document.getElementById('spin-button');
+    const balanceElement = document.getElementById('balance');
 
-    // Status Game
+    const symbols = [
+        'images/apolo.jpg',
+        'images/hermes.jpg',
+        'images/zeusbrabo.jpeg',
+        'images/zeusl.jpeg'
+    ];
+
+    const reelCount = 5;
+    const rowCount = 4;
     let balance = 1000;
-    let currentBet = 10;
-    const betStep = 10;
-    const numRows = 4;
-    const numCols = 5;
-    let isSpinning = false;
 
-    // Aset Simbol
-    const symbols = {
-        'zeus': 'zeusbrabo.jpeg',
-        'apollo': 'apolo.jpg',
-        'hermes': 'hermes.jpg',
-        'pegasus': 'str.jpeg', // Menggunakan gambar yang ada sebagai placeholder
-        'temple': 'zeusl.jpeg', // Placeholder
-        'wild': 'logopr.jpeg', // Placeholder
-        'scatter': 'cont.jpeg' // Placeholder
-    };
-    const symbolKeys = Object.keys(symbols);
+    const reels = [];
 
-    // --- Inisialisasi ---
-    function init() {
-        createGrid();
-        updateDisplays();
-    }
-
-    function createGrid() {
-        slotMachine.innerHTML = '';
-        for (let i = 0; i < numRows * numCols; i++) {
+    function createReels() {
+        reelsContainer.innerHTML = '';
+        for (let i = 0; i < reelCount; i++) {
             const reel = document.createElement('div');
             reel.classList.add('reel');
-            const img = document.createElement('img');
-            // Mulai dengan simbol acak
-            const randomSymbol = symbolKeys[Math.floor(Math.random() * symbolKeys.length)];
-            img.src = `assets/${symbols[randomSymbol]}`;
-            img.alt = randomSymbol;
-            reel.appendChild(img);
-            slotMachine.appendChild(reel);
+            const reelStrip = document.createElement('div');
+            reelStrip.classList.add('reel-strip');
+
+            for (let j = 0; j < symbols.length * 10; j++) { // Populate with more symbols for a better spin effect
+                const symbol = document.createElement('div');
+                symbol.classList.add('symbol');
+                symbol.style.backgroundImage = `url(${symbols[Math.floor(Math.random() * symbols.length)]})`;
+                reelStrip.appendChild(symbol);
+            }
+            reel.appendChild(reelStrip);
+            reels.push(reelStrip);
+            reelsContainer.appendChild(reel);
         }
     }
 
-    // --- Logika Game ---
     function spin() {
-        if (isSpinning) return;
-        if (balance < currentBet) {
-            alert("Kredit tidak cukup!");
+        if (balance <= 0) {
+            alert("Saldo Anda habis!");
             return;
         }
+        balance -= 10;
+        updateBalance();
 
-        isSpinning = true;
-        balance -= currentBet;
-        winDisplay.textContent = '0';
-        updateDisplays();
-        spinSound.play();
-
-        const reels = slotMachine.children;
         let completedReels = 0;
 
-        for (let i = 0; i < reels.length; i++) {
-            const reel = reels[i];
-            const img = reel.querySelector('img');
+        reels.forEach((reelStrip, index) => {
+            const randomOffset = Math.floor(Math.random() * (symbols.length * 9));
+            const targetPosition = -randomOffset * 100;
+            reelStrip.style.transition = `transform ${2 + index * 0.5}s cubic-bezier(0.25, 0.1, 0.25, 1)`;
+            reelStrip.style.transform = `translateY(${targetPosition}px)`;
 
-            // Animasi putaran sederhana
-            const spinInterval = setInterval(() => {
-                const randomSymbol = symbolKeys[Math.floor(Math.random() * symbolKeys.length)];
-                img.src = `assets/${symbols[randomSymbol]}`;
-            }, 100);
-
-            // Hentikan putaran setelah beberapa saat
-            setTimeout(() => {
-                clearInterval(spinInterval);
-                // Tetapkan simbol akhir (ini akan menjadi hasil sebenarnya)
-                const finalSymbol = symbolKeys[Math.floor(Math.random() * symbolKeys.length)];
-                img.src = `assets/${symbols[finalSymbol]}`;
-                img.alt = finalSymbol;
-
+            reelStrip.addEventListener('transitionend', () => {
                 completedReels++;
-                if (completedReels === reels.length) {
-                    endSpin();
+                if (completedReels === reelCount) {
+                    checkWin();
                 }
-            }, 1000 + i * 100); // Penundaan berjenjang untuk efek yang bagus
-        }
+            }, { once: true });
+        });
     }
 
-    function endSpin() {
-        isSpinning = false;
-        checkForWins();
-    }
-
-    function checkForWins() {
-        // Placeholder untuk logika kemenangan
-        // TODO: Implementasikan 50 garis pembayaran dan deteksi kemenangan nyata
-
-        // Contoh logika kemenangan sederhana: jika ada 3 'zeus' di baris pertama
-        const reels = slotMachine.children;
-        let zeusCount = 0;
-        for(let i = 0; i < 5; i++) {
-            if (reels[i].querySelector('img').alt === 'zeus') {
-                zeusCount++;
+    function checkWin() {
+        // Simple win condition: check if the middle row has matching symbols
+        const middleRowSymbols = [];
+        reels.forEach(reelStrip => {
+            const transform = window.getComputedStyle(reelStrip).transform;
+            const matrix = new DOMMatrixReadOnly(transform);
+            const translateY = matrix.m42;
+            const symbolIndex = Math.abs(Math.round(translateY / 100)) % symbols.length;
+            const children = Array.from(reelStrip.children);
+            const visibleSymbol = children.find((child, index) => index * 100 >= Math.abs(translateY) && index * 100 < Math.abs(translateY) + 400);
+            if(visibleSymbol){
+                 middleRowSymbols.push(visibleSymbol.style.backgroundImage);
             }
-        }
+        });
 
-        if (zeusCount >= 3) {
-            const winAmount = currentBet * 10; // Kemenangan 10x
-            balance += winAmount;
-            winDisplay.textContent = winAmount;
-            winSound.play();
-            updateDisplays();
-        }
-    }
+        const allSame = middleRowSymbols.every(val => val === middleRowSymbols[0]);
 
-    // --- Kontrol UI ---
-    function updateDisplays() {
-        balanceDisplay.textContent = balance;
-        betDisplay.textContent = currentBet;
-    }
-
-    function adjustBet(amount) {
-        let newBet = currentBet + amount;
-        if (newBet > 0 && newBet <= balance) {
-            currentBet = newBet;
-            updateDisplays();
+        if (allSame) {
+            balance += 100;
+            updateBalance();
+            reelsContainer.classList.add('win-animation');
+            playSound('sounds/Its-gonna-be-alrigh.mp3');
+            setTimeout(() => {
+                reelsContainer.classList.remove('win-animation');
+            }, 2000);
+        } else {
+            playSound('sounds/sloth-inspired-fall-sound-no1-124165.mp3');
         }
     }
 
-    // --- Event Listeners ---
-    spinBtn.addEventListener('click', spin);
-    betUpBtn.addEventListener('click', () => adjustBet(betStep));
-    betDownBtn.addEventListener('click', () => adjustBet(-betStep));
+    function updateBalance() {
+        balanceElement.textContent = balance;
+    }
 
-    // Mulai game
-    init();
+    function playSound(soundFile) {
+        const audio = new Audio(soundFile);
+        audio.play();
+    }
+
+    spinButton.addEventListener('click', spin);
+
+    createReels();
+    updateBalance();
 });
