@@ -1,0 +1,78 @@
+body {
+    background-image: url('assets/bg.jpg');
+    background-size: cover;
+    overflow: hidden;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slot-machine {
+    position: relative;
+}
+
+.reels {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('assets/reel-bg.png');
+    width: 630px;
+    height: 380px;
+    padding: 0 50px;
+}
+
+.reel {
+    width: 150px;
+    height: 150px;
+    margin: 0 10px;
+    overflow: hidden;
+    border: none;
+}
+
+.reel img {
+    width: 100%;
+    height: 100%;
+}
+
+.reel-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+#ui-container {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+
+#spin-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#spin-button:hover {
+    transform: scale(1.1);
+}
+
+#spin-button img {
+    width: 200px;
+}
+
+#bottom-bar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: white;
+    font-size: 2em;
+    padding: 20px;
+}
