@@ -13,17 +13,14 @@
                 <div class="reel"><img src="assets/slots-7.png"></div>
                 <div class="reel"><img src="assets/slots-bar.png"></div>
                 <div class="reel"><img src="assets/slots-crown.png"></div>
+                <div class="reel"><img src="assets/slots-diamond.png"></div>
+                <div class="reel"><img src="assets/slots-lemon.png"></div>
+                <div class="reel"><img src="assets/slots-melon.png"></div>
+                <div class="reel"><img src="assets/slots-10.png"></div>
             </div>
-            <img class="reel-overlay" src="assets/reel-overlay.png">
         </div>
         <div id="ui-container">
-            <div id="top-bar">
-                <img src="assets/top-bars-glow.png">
-            </div>
-            <button id="spin-button">
-                <img src="assets/spin-btn.png">
-            </button>
-            <div id="bottom-bar">
+            <div id="status-bar">
                 <div class="ui-element">
                     <span>Credits:</span>
                     <span id="credits">100</span>
@@ -33,6 +30,11 @@
                     <span id="bet-amount">10</span>
                 </div>
             </div>
+            <button id="spin-button">SPIN</button>
+            <div id="message-container"></div>
+        </div>
+        <div id="win-animation-container">
+            <img id="win-image" src="assets/big-win.png" style="display: none;">
         </div>
         <audio id="spin-sound" src="assets/spin.mp3"></audio>
         <audio id="win-sound" src="assets/win.mp3"></audio>
