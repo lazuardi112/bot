@@ -83,8 +83,46 @@ body {
     animation: win-pulse 1s infinite;
 }
 
+.big-win-animation {
+    animation: big-win-effect 2s ease-in-out;
+}
+
+.jackpot-animation {
+    animation: jackpot-effect 3s ease-in-out;
+}
+
+.lose-animation {
+    animation: lose-effect 1s ease-in-out;
+}
+
 @keyframes win-pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
+}
+
+@keyframes big-win-effect {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+    50% { transform: scale(1.2); box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0.7); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+}
+
+@keyframes jackpot-effect {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(10deg) scale(1.2); }
+    50% { transform: rotate(-10deg) scale(1.2); }
+    75% { transform: rotate(10deg) scale(1.2); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+
+@keyframes lose-effect {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.payline-highlight {
+    position: absolute;
+    background-color: rgba(255, 215, 0, 0.5);
+    z-index: 10;
 }
