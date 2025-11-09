@@ -41,13 +41,42 @@ body {
 }
 
 #spin-button {
-    padding: 10px 20px;
-    font-size: 1.2em;
-    cursor: pointer;
-    background-color: #ffd700;
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(145deg, #ffde00, #ffb700);
     border: none;
-    color: #333;
-    border-radius: 5px;
+    border-radius: 50px;
+    cursor: pointer;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+    margin: 20px;
+}
+
+#spin-button:hover {
+    background: linear-gradient(145deg, #ffe64d, #ffc433);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+#spin-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 .win-animation {
