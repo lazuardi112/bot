@@ -1,16 +1,32 @@
 {
-  "name": "zeus-slot-game",
+  "name": "telegram-bot-creator",
   "version": "1.0.0",
-  "main": "server.js",
+  "description": "A Telegram bot that allows users to create and manage their own bots.",
+  "main": "web/index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "npm-run-all --parallel start:web start:bot",
+    "start:web": "node web/index.js",
+    "start:bot": "node bot/index.js",
+    "dev": "npm-run-all --parallel dev:web dev:bot",
+    "dev:web": "nodemon web/index.js",
+    "dev:bot": "nodemon bot/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "telegram",
+    "bot",
+    "creator"
+  ],
   "author": "",
   "license": "ISC",
-  "description": "A Zeus-themed slot machine game.",
   "dependencies": {
-    "express": "^4.18.2"
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6",
+    "telegraf": "^4.15.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "npm-run-all": "^4.1.5"
   }
 }
