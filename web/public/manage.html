@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Bot</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="back-link">&larr; Kembali ke Dasbor</a>
+            <h1 id="bot-name-header">Kelola Bot: Memuat...</h1>
+            <p>Atur balasan otomatis dan pengaturan lain untuk bot Anda.</p>
+        </header>
+
+        <main>
+            <section class="card">
+                <h2>Tambah Balasan Otomatis Baru</h2>
+                <form id="add-reply-form">
+                    <div class="form-group">
+                        <label for="keyword">Kata Kunci (Pemicu)</label>
+                        <input type="text" id="keyword" name="keyword" placeholder="Contoh: /start, halo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reply-text">Teks Balasan</label>
+                        <textarea id="reply-text" name="replyText" rows="4" placeholder="Masukkan pesan yang akan dikirim bot" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Jenis Tombol (Opsional)</label>
+                        <div id="button-container">
+                            <!-- Tombol dinamis akan ditambahkan di sini -->
+                        </div>
+                        <button type="button" id="add-button-btn" class="btn btn-secondary">Tambah Tombol</button>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Simpan Balasan</button>
+                </form>
+            </section>
+
+            <section class="card">
+                <h2>Balasan yang Ada</h2>
+                <div id="reply-list">
+                    <!-- Daftar balasan akan dimuat di sini -->
+                    <p>Memuat balasan...</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="manage.js"></script>
+</body>
+</html>
