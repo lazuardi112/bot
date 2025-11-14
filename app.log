@@ -1,0 +1,3 @@
+
+> telegram-bot-creator@1.0.0 start
+> npm-run-all --parallel start:*

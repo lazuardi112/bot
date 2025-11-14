@@ -31,6 +31,7 @@ db.serialize(() => {
       user_id INTEGER NOT NULL,
       bot_token TEXT UNIQUE NOT NULL,
       bot_username TEXT,
+      is_active BOOLEAN DEFAULT 0,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users (id)
     )
@@ -47,6 +48,30 @@ db.serialize(() => {
       FOREIGN KEY (bot_id) REFERENCES bots (id)
     )
   `);
+
+  // Replies table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS replies (
+      id INTEGER PRIMARY KEY,
+      bot_id INTEGER NOT NULL,
+      keyword TEXT NOT NULL,
+      reply_text TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (bot_id) REFERENCES bots (id)
+    )
+  `);
+
+  // Buttons table
+  db.run(`
+      CREATE TABLE IF NOT EXISTS buttons (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          reply_id INTEGER NOT NULL,
+          text TEXT NOT NULL,
+          url TEXT NOT NULL,
+          FOREIGN KEY (reply_id) REFERENCES replies(id) ON DELETE CASCADE
+      );
+  `);
+
 });
 
 // Export the database connection

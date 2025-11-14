@@ -4,12 +4,14 @@
   "description": "A Telegram bot that allows users to create and manage their own bots.",
   "main": "web/index.js",
   "scripts": {
-    "start": "npm-run-all --parallel start:web start:bot",
+    "start": "npm-run-all --parallel start:*",
     "start:web": "node web/index.js",
     "start:bot": "node bot/index.js",
-    "dev": "npm-run-all --parallel dev:web dev:bot",
+    "start:runner": "node bot_runner.js",
+    "dev": "npm-run-all --parallel dev:*",
     "dev:web": "nodemon web/index.js",
     "dev:bot": "nodemon bot/index.js",
+    "dev:runner": "nodemon bot_runner.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

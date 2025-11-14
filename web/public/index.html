@@ -1,14 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bot Management</title>
+  <title>Manajemen Bot</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>Bot Management</h1>
-  <p>Welcome to the web app for managing your Telegram bots.</p>
+  <div class="container">
+    <header>
+      <h1>Dasbor Manajemen Bot</h1>
+      <p>Buat dan kelola bot Telegram Anda dengan mudah.</p>
+    </header>
+
+    <main>
+      <section class="card add-bot-section">
+        <h2>Tambah Bot Baru</h2>
+        <form id="add-bot-form">
+          <div class="form-group">
+            <label for="bot-token">Token Bot</label>
+            <input type="text" id="bot-token" name="botToken" placeholder="Masukkan token bot Anda dari @BotFather" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Tambah Bot</button>
+        </form>
+      </section>
+
+      <section class="card bot-list-section">
+        <h2>Bot Saya</h2>
+        <div id="bot-list" class="bot-list-container">
+          <!-- Daftar bot akan dimuat di sini oleh JavaScript -->
+          <p>Memuat bot Anda...</p>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <script src="script.js"></script>
 </body>
