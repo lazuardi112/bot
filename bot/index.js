@@ -47,7 +47,7 @@ bot.start(async (ctx) => {
         {
           reply_markup: {
             inline_keyboard: [
-              [{ text: 'Buka Aplikasi Web', web_app: { url: 'https://your-web-app-url.com' } }],
+              [{ text: 'Buka Aplikasi Web', web_app: { url: process.env.WEB_APP_URL || 'http://localhost:5001' } }],
             ],
           },
         }
